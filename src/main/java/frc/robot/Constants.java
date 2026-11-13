@@ -15,5 +15,8 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+
+    //need to adjust this value according to the controller we use
+    public static final double controllerDeadZone = 0.08;
   }
 }
