@@ -20,8 +20,8 @@ public class SwerveModule {
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
 
     //TODO: PID tuning
-    private static final double DRIVE_KP = 0.0;
-    private static final double STEER_KP = 0.0;
+    private static final double DRIVE_KP = 0.5;
+    private static final double STEER_KP = 0.5;
     
     //TODO: voltage cap for PID tuning;
     private static final double MAX_DRIVE_VOLTS = 3.0;
