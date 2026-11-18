@@ -17,6 +17,7 @@ public class DriveConstants {
     public static final int BR_DRIVE_ID = 9;
     public static final int BR_STEER_ID = 10;
     public static final int BR_ENCODER_ID = 11;
+    public static final int PIGEON2_ID = 12;
 
     public static final double WHEELBASE_METERS = 0.0;
     public static final double TRACKWIDTH_METERS = 0.0;

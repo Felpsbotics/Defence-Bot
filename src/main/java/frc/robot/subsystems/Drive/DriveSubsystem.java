@@ -1,5 +1,8 @@
 package frc.robot.subsystems.Drive;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -12,13 +15,29 @@ public class DriveSubsystem extends SubsystemBase{
   private final SwerveModule frontRight = new SwerveModule(DriveConstants.FR_DRIVE_ID, DriveConstants.FR_STEER_ID, DriveConstants.FR_ENCODER_ID);
   private final SwerveModule backLeft = new SwerveModule(DriveConstants.BL_DRIVE_ID, DriveConstants.BL_STEER_ID, DriveConstants.BL_ENCODER_ID);
   private final SwerveModule backRight = new SwerveModule(DriveConstants.BR_DRIVE_ID, DriveConstants.BR_STEER_ID, DriveConstants.BR_ENCODER_ID);
+  private final Pigeon2 gyro = new Pigeon2(DriveConstants.PIGEON2_ID, "rio");
 
   public DriveSubsystem(){};
 
+  @Override
+  public void periodic() {
+      //get yaw angle from gyro (as a status signal)
+      var yawSignal = gyro.getYaw();
+
+      SmartDashboard.putBoolean("Drive/GyroConnected", yawSignal.getStatus().isOK());
+
+      if (yawSignal.getStatus().isOK()){
+        SmartDashboard.putNumber("Drive/YawAngleDegs", yawSignal.getValueAsDouble());
+      }
+  }
+
   public void drive(double forwardMetersPerSecond, double leftMetersPerSecond, double turnRadPerSecond){
 
-    //chassis speeds stores all three values: fwd, left and turning(in radians)
-    ChassisSpeeds robotSpeeds = new ChassisSpeeds(forwardMetersPerSecond, leftMetersPerSecond, turnRadPerSecond);
+    var yawSignal = gyro.getYaw();
+    Rotation2d heading = Rotation2d.fromDegrees(yawSignal.getValueAsDouble());
+
+    //chassis speeds stores four values: fwd, left, turning(in radians) and heading
+    ChassisSpeeds robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardMetersPerSecond, leftMetersPerSecond, turnRadPerSecond, heading);
 
     //Calculates target speed for each module with applied speed
     SwerveModuleState [] targets = DriveConstants.kinematics.toSwerveModuleStates(robotSpeeds);
@@ -35,6 +54,10 @@ public class DriveSubsystem extends SubsystemBase{
       SmartDashboard.putNumber(key + "/TargetSpeedMps", targets[i].speedMetersPerSecond);
       SmartDashboard.putNumber(key + "/TargetAngleDegrees", targets[i].angle.getDegrees());
     }
+  }
+
+  public void resetGyro(){
+    gyro.setYaw(0.0);
   }
 
   public void stop(){
