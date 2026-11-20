@@ -21,15 +21,18 @@ public class SwerveModule {
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
 
     //TODO: PID tuning
-    private static final double DRIVE_KP = 0.5;
-    private static final double STEER_KP = 0.5;
+    private static final double DRIVE_KP = 0.8;
+    private static final double STEER_KP = 0.8;
+
+    private static final double DRIVE_KD = 0.1;
+    private static final double STEER_KD = 0.1;
     
     //TODO: voltage cap for PID tuning;
-    private static final double MAX_DRIVE_VOLTS = 3.0;
-    private static final double MAX_STEER_VOLTS = 2.0;
+    private static final double MAX_DRIVE_VOLTS = 9;
+    private static final double MAX_STEER_VOLTS = 6;
 
-    private final PIDController drivePID = new PIDController(DRIVE_KP, 0.0, 0.0);
-    private final PIDController steerPID = new PIDController(STEER_KP, 0.0, 0.0);
+    private final PIDController drivePID = new PIDController(DRIVE_KP, 0.0, DRIVE_KD);
+    private final PIDController steerPID = new PIDController(STEER_KP, 0.0, STEER_KD);
     
 
     private final TalonFX driveMotor;

@@ -36,7 +36,7 @@ public class DriveSubsystem extends SubsystemBase{
     var yawSignal = gyro.getYaw();
     Rotation2d heading = Rotation2d.fromDegrees(yawSignal.getValueAsDouble());
 
-    //chassis speeds stores four values: fwd, left, turning(in radians) and heading
+    //chassis speeds stores four values: fwd, left, turning and heading
     ChassisSpeeds robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardMetersPerSecond, leftMetersPerSecond, turnRadPerSecond, heading);
 
     //Calculates target speed for each module with applied speed
