@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -15,12 +17,34 @@ public class DriveSubsystem extends SubsystemBase{
   private final SwerveModule frontRight = new SwerveModule(DriveConstants.FR_DRIVE_ID, DriveConstants.FR_STEER_ID, DriveConstants.FR_ENCODER_ID);
   private final SwerveModule backLeft = new SwerveModule(DriveConstants.BL_DRIVE_ID, DriveConstants.BL_STEER_ID, DriveConstants.BL_ENCODER_ID);
   private final SwerveModule backRight = new SwerveModule(DriveConstants.BR_DRIVE_ID, DriveConstants.BR_STEER_ID, DriveConstants.BR_ENCODER_ID);
+  private final SwerveModule [] modules = {frontLeft, frontRight, backLeft, backRight};
   private final Pigeon2 gyro = new Pigeon2(DriveConstants.PIGEON2_ID, "rio");
+  
+  //TODO: delete these after finish tuning PID
+  private final NetworkTableEntry driveP = NetworkTableInstance.getDefault().getTable("Tuning").getEntry("driveP");
+  private final NetworkTableEntry driveI = NetworkTableInstance.getDefault().getTable("Tuning").getEntry("driveI");
+  private final NetworkTableEntry driveD = NetworkTableInstance.getDefault().getTable("Tuning").getEntry("driveD");
+  private final NetworkTableEntry steerP = NetworkTableInstance.getDefault().getTable("Tuning").getEntry("steerP");
+  private final NetworkTableEntry steerI = NetworkTableInstance.getDefault().getTable("Tuning").getEntry("steerI");
+  private final NetworkTableEntry steerD = NetworkTableInstance.getDefault().getTable("Tuning").getEntry("steerD");
+
+  private final NetworkTableEntry maxMetersPerSec = NetworkTableInstance.getDefault().getTable("Speeds").getEntry("maxMetersPerSec");
+  private final NetworkTableEntry maxRadPerSec = NetworkTableInstance.getDefault().getTable("Speeds").getEntry("maxRadPerSec");
 
   public DriveSubsystem(){};
 
   @Override
   public void periodic() {
+    //update max mps and rps
+    DriveConstants.MAX_SPEED_METERS_PER_SECOND = maxMetersPerSec.getDouble(4);
+    DriveConstants.MAX_TURN_RAD_PER_SECOND = maxRadPerSec.getDouble(7);
+
+    //update PID periodically for tuning
+    for (SwerveModule module : modules){
+      module.applyDrivePID(driveP.getDouble(SwerveModule.DRIVE_KP), driveI.getDouble(SwerveModule.DRIVE_KI), driveD.getDouble(SwerveModule.DRIVE_KD));
+      module.applySteerPID(steerP.getDouble(SwerveModule.STEER_KP), steerI.getDouble(SwerveModule.STEER_KI), steerD.getDouble(SwerveModule.STEER_KD));
+    }
+
       //get yaw angle from gyro (as a status signal)
       var yawSignal = gyro.getYaw();
 
