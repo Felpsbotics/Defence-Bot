@@ -2,7 +2,6 @@ package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
@@ -21,15 +20,21 @@ public class SwerveModule {
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
 
     //TODO: PID tuning
-    private static final double DRIVE_KP = 0.5;
-    private static final double STEER_KP = 0.5;
+    public static double DRIVE_KP = 0.8;
+    public static double STEER_KP = 0.8;
+
+    public static double DRIVE_KI = 0.1;
+    public static double STEER_KI = 0.1;
+
+    public static double DRIVE_KD = 0.1;
+    public static double STEER_KD = 0.1;
     
     //TODO: voltage cap for PID tuning;
-    private static final double MAX_DRIVE_VOLTS = 3.0;
-    private static final double MAX_STEER_VOLTS = 2.0;
+    private static final double MAX_DRIVE_VOLTS = 12;
+    private static final double MAX_STEER_VOLTS = 12;
 
-    private final PIDController drivePID = new PIDController(DRIVE_KP, 0.0, 0.0);
-    private final PIDController steerPID = new PIDController(STEER_KP, 0.0, 0.0);
+    private final PIDController drivePID = new PIDController(DRIVE_KP, DRIVE_KI, DRIVE_KD);
+    private final PIDController steerPID = new PIDController(STEER_KP, STEER_KI, STEER_KD);
     
 
     private final TalonFX driveMotor;
@@ -99,6 +104,18 @@ public class SwerveModule {
 
         setDriveSpeed(target.speedMetersPerSecond, rotorSignal);
         setDesiredAngle(target.angle, angleSignal);
+    }
+
+    public void applyDrivePID(double kp, double ki, double kd){
+        DRIVE_KP = kp;
+        DRIVE_KI = ki;
+        DRIVE_KD = kd;
+    }
+
+    public void applySteerPID(double kp, double ki, double kd){
+        STEER_KP = kp;
+        STEER_KI = ki;
+        STEER_KD = kd;
     }
 
     public void stop(){

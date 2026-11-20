@@ -19,11 +19,11 @@ public class DriveConstants {
     public static final int BR_ENCODER_ID = 11;
     public static final int PIGEON2_ID = 12;
 
-    public static final double WHEELBASE_METERS = 0.0;
-    public static final double TRACKWIDTH_METERS = 0.0;
+    public static final double WHEELBASE_METERS = 0.65;
+    public static final double TRACKWIDTH_METERS = 0.47;
 
-    public static double MAX_SPEED_METERS_PER_SECOND = 1.0;
-    public static double MAX_TURN_RAD_PER_SECOND = 1.5;
+    public static double MAX_SPEED_METERS_PER_SECOND = 4;
+    public static double MAX_TURN_RAD_PER_SECOND = 7;
 
     //module positions relative to the center
     public static final SwerveDriveKinematics kinematics =
