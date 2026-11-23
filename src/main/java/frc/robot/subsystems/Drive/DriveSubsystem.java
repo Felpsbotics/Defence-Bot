@@ -31,7 +31,20 @@ public class DriveSubsystem extends SubsystemBase{
   private final NetworkTableEntry maxMetersPerSec = NetworkTableInstance.getDefault().getTable("Speeds").getEntry("maxMetersPerSec");
   private final NetworkTableEntry maxRadPerSec = NetworkTableInstance.getDefault().getTable("Speeds").getEntry("maxRadPerSec");
 
-  public DriveSubsystem(){};
+  public DriveSubsystem() {
+    driveP.setDefaultDouble(SwerveModule.DRIVE_KP);
+    driveI.setDefaultDouble(SwerveModule.DRIVE_KI);
+    driveD.setDefaultDouble(SwerveModule.DRIVE_KD);
+
+    steerP.setDefaultDouble(SwerveModule.STEER_KP);
+    steerI.setDefaultDouble(SwerveModule.STEER_KI);
+    steerD.setDefaultDouble(SwerveModule.STEER_KD);
+
+    maxMetersPerSec.setDefaultDouble(
+        DriveConstants.MAX_SPEED_METERS_PER_SECOND);
+    maxRadPerSec.setDefaultDouble(
+        DriveConstants.MAX_TURN_RAD_PER_SECOND);
+}
 
   @Override
   public void periodic() {
