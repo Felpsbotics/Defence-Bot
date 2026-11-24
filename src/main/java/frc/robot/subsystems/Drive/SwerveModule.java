@@ -20,18 +20,18 @@ public class SwerveModule {
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
 
     //TODO: PID tuning
-    public static double DRIVE_KP = 0.1;
-    public static double STEER_KP = 1.0;
+    public static double DRIVE_KP = 1;
+    public static double STEER_KP = 1;
 
     public static double DRIVE_KI = 0;
     public static double STEER_KI = 0;
 
-    public static double DRIVE_KD = 0;
-    public static double STEER_KD = 0;
+    public static double DRIVE_KD = 0.01;
+    public static double STEER_KD = 0.01;
     
     //TODO: voltage cap for PID tuning;
     private static final double MAX_DRIVE_VOLTS = 12;
-    private static final double MAX_STEER_VOLTS = 12;
+    private static final double MAX_STEER_VOLTS = 7;
 
     private final PIDController drivePID = new PIDController(DRIVE_KP, DRIVE_KI, DRIVE_KD);
     private final PIDController steerPID = new PIDController(STEER_KP, STEER_KI, STEER_KD);

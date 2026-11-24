@@ -41,7 +41,7 @@ public class DriveCommand extends Command{
         //apply controller deadzone to inputs
         double fwd = MathUtil.applyDeadband(forwardInput.getAsDouble(), Constants.OperatorConstants.controllerDeadZone);
         double left = MathUtil.applyDeadband(leftInput.getAsDouble(), Constants.OperatorConstants.controllerDeadZone);
-        double turn = MathUtil.applyDeadband(turnInput.getAsDouble(), 0.0);
+        double turn = MathUtil.applyDeadband(turnInput.getAsDouble(), Constants.OperatorConstants.controllerDeadZone);
 
         drive.drive(fwd * DriveConstants.MAX_SPEED_METERS_PER_SECOND, left * DriveConstants.MAX_SPEED_METERS_PER_SECOND, turn * DriveConstants.MAX_TURN_RAD_PER_SECOND);
     }
