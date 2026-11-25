@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModule {
 
@@ -104,6 +105,14 @@ public class SwerveModule {
 
         setDriveSpeed(target.speedMetersPerSecond, rotorSignal);
         setDesiredAngle(target.angle, angleSignal);
+    }
+
+    public double getCurrentDriveVoltage(){
+        return driveMotor.getMotorVoltage().getValueAsDouble();
+    }
+
+    public double getCurrentSteerVoltage(){
+        return steerMotor.getMotorVoltage().getValueAsDouble();
     }
 
     public void applyDrivePID(double kp, double ki, double kd){

@@ -90,6 +90,8 @@ public class DriveSubsystem extends SubsystemBase{
       String key = "Drive/" + DriveConstants.moduleNames[i];
       SmartDashboard.putNumber(key + "/TargetSpeedMps", targets[i].speedMetersPerSecond);
       SmartDashboard.putNumber(key + "/TargetAngleDegrees", targets[i].angle.getDegrees());
+      SmartDashboard.putNumber(key + "/CurrentDriveVoltage", modules[i].getCurrentDriveVoltage());
+      SmartDashboard.putNumber(key + "/CurrentSteerVoltage", modules[i].getCurrentSteerVoltage());
     }
   }
 
