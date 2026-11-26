@@ -107,6 +107,24 @@ public class SwerveModule {
         setDesiredAngle(target.angle, angleSignal);
     }
 
+    public double getDrivePositionMeters(){
+
+        double motorRotations = driveMotor.getRotorPosition().getValueAsDouble();
+
+        double wheelRotations = motorRotations / DRIVE_GEAR_RATIO;
+
+        return wheelRotations * Math.PI * WHEEL_DIAMETER_METERS;
+    }
+
+    public double getDriveVelocityMetersPerSecond() {
+        
+        double motorRotationsPerSecond = driveMotor.getRotorVelocity().getValueAsDouble();
+
+        double wheelRotationsPerSecond = motorRotationsPerSecond / DRIVE_GEAR_RATIO;
+
+        return wheelRotationsPerSecond * Math.PI * WHEEL_DIAMETER_METERS;
+    }
+
     public double getCurrentDriveVoltage(){
         return driveMotor.getMotorVoltage().getValueAsDouble();
     }
