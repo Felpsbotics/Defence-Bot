@@ -2,7 +2,6 @@ package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
@@ -11,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModule {
 
@@ -21,15 +21,21 @@ public class SwerveModule {
     private static final double WHEEL_DIAMETER_METERS = 0.1016;
 
     //TODO: PID tuning
-    private static final double DRIVE_KP = 0.5;
-    private static final double STEER_KP = 0.5;
+    public static double DRIVE_KP = 1;
+    public static double STEER_KP = 1;
+
+    public static double DRIVE_KI = 0;
+    public static double STEER_KI = 0;
+
+    public static double DRIVE_KD = 0.01;
+    public static double STEER_KD = 0.01;
     
     //TODO: voltage cap for PID tuning;
-    private static final double MAX_DRIVE_VOLTS = 3.0;
-    private static final double MAX_STEER_VOLTS = 2.0;
+    private static final double MAX_DRIVE_VOLTS = 12;
+    private static final double MAX_STEER_VOLTS = 7;
 
-    private final PIDController drivePID = new PIDController(DRIVE_KP, 0.0, 0.0);
-    private final PIDController steerPID = new PIDController(STEER_KP, 0.0, 0.0);
+    private final PIDController drivePID = new PIDController(DRIVE_KP, DRIVE_KI, DRIVE_KD);
+    private final PIDController steerPID = new PIDController(STEER_KP, STEER_KI, STEER_KD);
     
 
     private final TalonFX driveMotor;
@@ -99,6 +105,40 @@ public class SwerveModule {
 
         setDriveSpeed(target.speedMetersPerSecond, rotorSignal);
         setDesiredAngle(target.angle, angleSignal);
+    }
+
+    public double getDrivePositionMeters(){
+
+        double motorRotations = driveMotor.getRotorPosition().getValueAsDouble();
+
+        double wheelRotations = motorRotations / DRIVE_GEAR_RATIO;
+
+        return wheelRotations * Math.PI * WHEEL_DIAMETER_METERS;
+    }
+
+    public double getDriveVelocityMetersPerSecond() {
+        
+        double motorRotationsPerSecond = driveMotor.getRotorVelocity().getValueAsDouble();
+
+        double wheelRotationsPerSecond = motorRotationsPerSecond / DRIVE_GEAR_RATIO;
+
+        return wheelRotationsPerSecond * Math.PI * WHEEL_DIAMETER_METERS;
+    }
+
+    public double getCurrentDriveVoltage(){
+        return driveMotor.getMotorVoltage().getValueAsDouble();
+    }
+
+    public double getCurrentSteerVoltage(){
+        return steerMotor.getMotorVoltage().getValueAsDouble();
+    }
+
+    public void applyDrivePID(double kp, double ki, double kd){
+        drivePID.setPID(kp, ki, kd);
+    }
+
+    public void applySteerPID(double kp, double ki, double kd){
+        steerPID.setPID(kp, ki, kd);
     }
 
     public void stop(){

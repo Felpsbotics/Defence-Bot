@@ -6,6 +6,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.Drive.DriveConstants;
 import frc.robot.subsystems.Drive.DriveSubsystem;
 
 public class DriveCommand extends Command{
@@ -42,7 +43,7 @@ public class DriveCommand extends Command{
         double left = MathUtil.applyDeadband(leftInput.getAsDouble(), Constants.OperatorConstants.controllerDeadZone);
         double turn = MathUtil.applyDeadband(turnInput.getAsDouble(), Constants.OperatorConstants.controllerDeadZone);
 
-        drive.drive(fwd, left, turn);
+        drive.drive(fwd * DriveConstants.MAX_SPEED_METERS_PER_SECOND, left * DriveConstants.MAX_SPEED_METERS_PER_SECOND, turn * DriveConstants.MAX_TURN_RAD_PER_SECOND);
     }
 
 
